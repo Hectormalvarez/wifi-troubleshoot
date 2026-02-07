@@ -70,6 +70,18 @@ else
     if sudo -n true 2>/dev/null; then
         sudo dmesg | grep -iE 'wlan|wifi|firmware|iwlwifi' | tail -n 20 >> "$OUTPUT_FILE" 2>&1
     else
-        echo "Check Skipped: Run with 'sudo' to see kernel logs (dmesg)." >> "$OUTPUT_FILE"
-    fi
+    echo "Check Skipped: Run with 'sudo' to see kernel logs (dmesg)." >> "$OUTPUT_FILE"
+fi
+
+# 8. Link Quality (Signal Strength, Channel, & Bitrate)
+echo -e "\n--- Link Quality ---" >> "$OUTPUT_FILE"
+if command -v nmcli &> /dev/null; then
+    nmcli -f IN-USE,SSID,CHAN,BARS,SIGNAL,RATE,SECURITY dev wifi >> "$OUTPUT_FILE"
+elif command -v iwconfig &> /dev/null; then
+    iwconfig "$WIFI_IFACE" >> "$OUTPUT_FILE"
+else
+    echo "Error: No link quality tools found (nmcli/iwconfig)." >> "$OUTPUT_FILE"
+fi
+
+echo "Diagnostics complete."
 fi

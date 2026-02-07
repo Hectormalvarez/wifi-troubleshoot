@@ -52,3 +52,11 @@ else
 fi
 
 echo "Report generated: $OUTPUT_FILE"
+
+# 6. RF Kill Status (Hardware/Software Blocks)
+echo -e "\n--- RF Kill Status ---" >> "$OUTPUT_FILE"
+if command -v rfkill &> /dev/null; then
+    rfkill list all >> "$OUTPUT_FILE"
+else
+    echo "Error: rfkill command not found." >> "$OUTPUT_FILE"
+fi

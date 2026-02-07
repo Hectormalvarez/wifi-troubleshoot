@@ -43,4 +43,12 @@ ping -c 1 8.8.8.8 > /dev/null 2>&1 && echo "Internet (IP 8.8.8.8): Reachable" >>
 # Test DNS resolution
 ping -c 1 google.com > /dev/null 2>&1 && echo "Internet (DNS google.com): Reachable" >> "$OUTPUT_FILE" || echo "Internet (DNS): UNREACHABLE" >> "$OUTPUT_FILE"
 
+# 5. Hardware Identification
+echo -e "\n--- Hardware Identification ---" >> "$OUTPUT_FILE"
+if command -v lspci &> /dev/null; then
+    lspci -nnk | grep -i net -A2 >> "$OUTPUT_FILE"
+else
+    echo "Error: lspci command not found." >> "$OUTPUT_FILE"
+fi
+
 echo "Report generated: $OUTPUT_FILE"

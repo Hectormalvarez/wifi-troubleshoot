@@ -60,3 +60,16 @@ if command -v rfkill &> /dev/null; then
 else
     echo "Error: rfkill command not found." >> "$OUTPUT_FILE"
 fi
+
+# 7. Recent Kernel Logs (Driver/Firmware Errors)
+echo -e "\n--- Recent Kernel Logs (Last 20 lines) ---" >> "$OUTPUT_FILE"
+if [ "$EUID" -eq 0 ]; then
+    dmesg | grep -iE 'wlan|wifi|firmware|iwlwifi' | tail -n 20 >> "$OUTPUT_FILE" 2>&1
+else
+    # Try passwordless sudo if available
+    if sudo -n true 2>/dev/null; then
+        sudo dmesg | grep -iE 'wlan|wifi|firmware|iwlwifi' | tail -n 20 >> "$OUTPUT_FILE" 2>&1
+    else
+        echo "Check Skipped: Run with 'sudo' to see kernel logs (dmesg)." >> "$OUTPUT_FILE"
+    fi
+fi

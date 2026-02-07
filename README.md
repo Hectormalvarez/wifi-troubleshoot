@@ -1,23 +1,30 @@
 # Ubuntu WiFi Troubleshooter
 
-A collection of tools to diagnose "Ghost Connections" (connected status with no throughput) on Ubuntu Linux.
+Tools to diagnose and fix "Ghost Connections" (connected status, no throughput) on Ubuntu Linux.
 
-## Repository Structure
+## Roadmap
 
-- `wifi_troubleshoot.md`: Reference guide for manual troubleshooting.
-- `collect_wifi_logs.sh`: Automated diagnostic script.
-- `reports/`: (Optional) Recommended folder to store generated logs.
+### Phase 1: The Observer (Current)
+**Goal:** Capture system state at the moment of failure.
+- `collect_wifi_logs.sh`: Generates timestamped reports.
+- **Checks:** IP/Route, Connectivity (Ping), Hardware ID, Driver Status, Kernel Logs.
 
-## Quick Start
+### Phase 2: The Operator (Planned)
+**Goal:** Safely reset the network stack without rebooting.
+- `reset_wifi.sh`:
+  - **Level 1:** Service restart (NetworkManager).
+  - **Level 2:** Driver reload (modprobe).
+  - **Level 3:** Hardware toggle (rfkill).
 
-1. Clone the repository.
-2. Make the script executable:
-   ```bash
-   chmod +x collect_wifi_logs.sh
-   ```
+### Phase 3: The Analyst (Planned)
+**Goal:** Background monitoring and auto-recovery based on heuristics.
 
+## Usage
 
-3. Run the script when a disconnect occurs:
-```bash
-./collect_wifi_logs.sh
-```
+1. **Make executable:**
+   `chmod +x collect_wifi_logs.sh`
+
+2. **Run during a disconnect:**
+   `./collect_wifi_logs.sh`
+
+3. **View Report:** Check the `reports/` folder.
